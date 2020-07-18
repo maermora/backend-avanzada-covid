@@ -9,13 +9,15 @@ const pool = new Pool({
     port: '5432'
 })
 
+const JWT_SECRETKEY = 'asdfjeirjkdf';
+
 const login = async(req, res) => {
     const {user, password} = req.body;
-    const auxuser = await pool.query('select * from users where user = $1', [user]);
-    if(!auxuser) return res.status(401).send('No existe el usuario');
-    if (auxuser.password !== password) return res.status(401).send('Password incorrecto');
-    res.send('Bienvenido');
-    const token = jwt.sign({_id: user._id})
+    const auxuser = await pool.query('select contrasena from users where usuario = $1', [user]);
+    if(!auxuser || auxuser.rows[0].contrasena !== password ) return res.status(403).send('Usuario o contraseña incorrectos');
+    console.log('Bienvenido');
+    const token = jwt.sign(user, JWT_SECRETKEY);
+    res.send(token);
 
 }
 const getPacientes = async (req, res) => {
