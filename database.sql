@@ -11,10 +11,13 @@ CREATE TABLE pacientes(
     estado varchar(50)
 );
 
-CREATE TABLE users(
+CREATE TABLE usuarios(
     id SERIAL PRIMARY KEY,
     usuario varchar(50),
-    contraseña varchar(255)
+    email varchar(100),
+    contrasena varchar(255)
 );
+
+insert into usuarios(usuario, email, contrasena) values('admin','admin@covinar.com', '123456789');
 
 \copy pacientes from 'D:\Universidad\Once Semestre\Avanzada II\1.Proyecto Final\Casos_COVID-19-Narino.csv' delimiter ',' CSV HEADER;

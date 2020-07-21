@@ -3,10 +3,12 @@ const router = Router();
 const { getPacientes,
         getPacientesM,
         getPacientesF,
-        login } = require('../controllers/index.controller');
+        login, 
+        signup} = require('../controllers/index.controller');
 
 router.get('/pacientes', getPacientes);
 router.post('/login', login);
+router.post('/signup',signup)
 router.get('/pacientesM', getPacientesM);
 router.get('/pacientes/mujeres', getPacientesF);
 

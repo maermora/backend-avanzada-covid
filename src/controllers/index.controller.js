@@ -13,12 +13,24 @@ const JWT_SECRETKEY = 'asdfjeirjkdf';
 
 const login = async(req, res) => {
     const {user, password} = req.body;
-    const auxuser = await pool.query('select contrasena from users where usuario = $1', [user]);
+    const auxuser = await pool.query('select contrasena from usuarios where usuario = $1', [user]);
     if(!auxuser || auxuser.rows[0].contrasena !== password ) return res.status(403).send('Usuario o contraseña incorrectos');
     console.log('Bienvenido');
     const token = jwt.sign(user, JWT_SECRETKEY);
-    res.send(token);
-
+    res.send({
+        signed_user: user,
+        token: token
+    });
+}
+const signup = async(req, res) => {
+    const {user, email, password} = req.body;
+    const newUser = await pool.query('insert into usuarios(usuario, email, contrasena) values ($1, $2, $3)',[user, email, password]);
+    const token = jwt.sign(user, JWT_SECRETKEY);
+    res.send({
+        signed_user: user,
+        token: token
+    })
+    
 }
 const getPacientes = async (req, res) => {
     const response = await pool.query('select * from pacientes');
@@ -39,5 +51,6 @@ module.exports = {
     getPacientes,
     getPacientesM,
     getPacientesF,
-    login
+    login,
+    signup
 }
